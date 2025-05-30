@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Scrapbook Interaktif</title>
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #fdf6e3;
+      font-family: 'Indie Flower', cursive;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      position: relative;
+    }
+
+    .book {
+      width: 800px;
+      height: 500px;
+      position: relative;
+      perspective: 2500px;
+    }
+
+    .cover {
+      width: 100%;
+      height: 100%;
+      background: #b5651d;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 36px;
+      font-weight: bold;
+      position: absolute;
+      z-index: 10;
+      cursor: pointer;
+      transition: transform 1s ease;
+      transform-origin: left;
+      backface-visibility: hidden;
+    }
+
+    .cover.opened {
+      transform: rotateY(-180deg);
+      z-index: 0;
+    }
+
+    .page {
+      width: 400px;
+      height: 100%;
+      background: #fff8dc;
+      position: absolute;
+      top: 0;
+      transition: transform 1s ease;
+      transform-origin: left;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      border: 1px solid #e0c097;
+      overflow: hidden;
+    }
+
+    .page img {
+      width: 200px;
+      border: 4px solid white;
+      margin: 20px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .page .note {
+      background: #ffebcd;
+      padding: 15px;
+      margin: 20px;
+      font-size: 18px;
+      border: 2px dashed #a0522d;
+    }
+
+    .page:nth-child(even) {
+      left: 0;
+      transform-origin: left;
+      z-index: 1;
+    }
+
+    .page:nth-child(odd) {
+      left: 400px;
+      transform-origin: right;
+      z-index: 2;
+    }
+
+    .page.flipped {
+      transform: rotateY(-180deg);
+      z-index: 0 !important;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: -60px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    button {
+      font-family: 'Indie Flower', cursive;
+      font-size: 20px;
+      background-color: #d4a373;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<audio id="music" loop style="display: none;">
+  <source src="blue_1748592266_musicaldown.com.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <div class="book" id="book">
+    <div class="cover" id="cover" onclick="openBook()">📖 Buka Buku</div>
+
+    <div class="page" onclick="flipPage(this)">
+      <img src="WhatsApp Image 2025-05-31 at 01.13.24_7e48f80c.jpg" alt="Foto">
+      <div class="note">Ada seribu hal yang bisa membuatku untuk meninggalkanmu, tetapi ada satu kata yang membuatku tetap di sini. Aku cinta kamu🌅</div>
+    </div>
+    <div class="page" onclick="flipPage(this)">
+      <img src="WhatsApp Image 2025-05-31 at 01.13.25_7563fba6.jpg" alt="Foto">
+      <div class="note">Aku ingin bertukar tulang denganmu. Aku jadi tulang punggungmu, kamu jadi tulang rusukku</div>
+    </div>
+    <div class="page" onclick="flipPage(this)">
+      <img src="WhatsApp Image 2025-05-31 at 01.13.25_adb76af9.jpg" alt="Foto">
+      <div class="note">Mengapa aku selalu rindu padamu? Sebab cintaku tak pernah usai ⛰️☁️</div>
+    </div>
+    <div class="page" onclick="flipPage(this)">
+      <img src="WhatsApp Image 2025-05-31 at 01.13.25_cc6daf65.jpg" alt="Foto">
+      <div class="note">Ketika jarak memisahkan kita berdua maka hanya satu yang harus selalu kamu ingat, yaitu aku akan selalu menjaga perasaan cintaku untukmu 🌊⛱️</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="prevPage()">⬅ Sebelumnya</button>
+    <button onclick="nextPage()">Selanjutnya ➡</button>
+  </div>
+</div>
+
+<script>
+  const cover = document.getElementById('cover');
+  const music = document.getElementById('music');
+  const pages = document.querySelectorAll('.page');
+  let current = 0;
+  let bookOpened = false;
+
+  function openBook() {
+    cover.classList.add('opened');
+    setTimeout(() => {
+      music.play().catch(err => {
+        console.log('Musik tidak dapat diputar otomatis:', err);
+      });
+      bookOpened = true;
+    }, 1000);
+  }
+
+  function flipPage(page) {
+    if (!bookOpened) return;
+    if (!page.classList.contains('flipped')) {
+      page.classList.add('flipped');
+      current++;
+    } else {
+      page.classList.remove('flipped');
+      current--;
+    }
+  }
+
+  function nextPage() {
+    if (!bookOpened) return;
+    if (current < pages.length) {
+      pages[current].classList.add('flipped');
+      current++;
+    }
+  }
+
+  function prevPage() {
+    if (!bookOpened) return;
+    if (current > 0) {
+      current--;
+      pages[current].classList.remove('flipped');
+    }
+  }
+</script>
+
+</body>
+</html>
